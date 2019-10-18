@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #div{
+            height: 1000px;
+        }
+    </style>
+</head>
+<body>
+<div id="div"></div>
+<script>
+    let id = true
+    document.onscroll = function () {
+        if (id){
+            console.log(1)
+            id = false
+            setTimeout(()=>{
+                id = true
+            },1000)
+        }
+
+
+    }
+</script>
+</body>
+</html>

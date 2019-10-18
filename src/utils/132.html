@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+
+  <link rel="stylesheet" type="text/css" href="" />
+  <style type="text/css">
+    #box {
+      height: 2000px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="box"></div>
+  <script type="text/javascript">
+  let a = document.getElementById('box')
+  console.log(typeof a.className)
+    // fn是我们需要包装的事件回调, interval是时间间隔的阈值
+    // function throttle(fn, interval) {
+    //   // last为上一次触发回调的时间
+    //   let last = 0
+
+    //   // 将throttle处理结果当作函数返回
+    //   return function () {
+    //     // 保留调用时的this上下文
+    //     let context = this
+    //     // 保留调用时传入的参数
+    //     let args = arguments
+    //     // 记录本次触发回调的时间
+    //     let now = +new Date()
+
+    //     // 判断上次触发的时间和本次触发的时间差是否小于时间间隔的阈值
+    //     if (now - last >= interval) {
+    //       // 如果时间间隔大于我们设定的时间间隔阈值，则执行回调
+    //       last = now;
+    //       fn.apply(context, args);
+    //     }
+    //   }
+    // }
+
+    //函数节流
+    //原理就是当事件连续触发时只采用他的第一次的结果
+    //封装一个处理回调函数的函数
+    function myThrottle(fn, interval) {
+      //第一个参数传进来的是需要处理的函数
+      //第二个参数是节流的时间间格
+      //last 为上一次触发回调的时间
+      let last = 0
+
+      return function () {
+        const now = +new Date()
+        if (now - last >= interval) {
+          //一般封装函数时如果传进来的参数是一个函数在掉要用的话需要
+          //用apply来改变参数函数的this和参数
+          // 保留调用时的this上下文
+          let context = this
+          // 保留调用时传入的参数
+          let args = arguments
+          fn.apply(context, args)
+          last = now
+        }
+      }
+
+    }
+
+
+    // 用throttle来包装scroll的回调
+    // const better_scroll = myThrottle(() => {
+    //   console.log(this)
+    // }, 1000)
+    // const better_scroll = myThrottle(() => console.log('触发了滚动事件'), 1000)
+
+    //document.addEventListener('scroll', better_scroll)
+
+
+
+    //函数防抖
+    //原理就是不管前面触发几次该回调函数只会采用最后一次回调函数
+    function myDebounce(fn,delay) {
+        let timer = null
+        
+        return function(){
+            if(timer){
+                clearTimeout(timer)
+            }
+            const context = this 
+            const args = arguments
+            timer = setTimeout(()=>{
+                console.log(1)
+                fn.apply(context,arguments)
+            },delay)
+        }
+    }
+
+    //通常情况下使用函数防抖的时候并不是要一个没有底线 的函数
+    //我们需要的是一个有底线的函数意思就是要等但是不是要一直等
+    //当用户在一直在触发一个回调时，我们不要一直等而是等到一个固定的时间时就给客户一个反馈
+    //要不然用户也会有卡顿的感觉
+    
+    
+
+
+
+
+
+
+    // fn是我们需要包装的事件回调, delay是每次推迟执行的等待时间
+    // function debounce(fn, delay) {
+    //   // 定时器
+    //   let timer = null
+
+    //   // 将debounce处理结果当作函数返回
+    //   return function () {
+    //     // 保留调用时的this上下文
+    //     let context = this
+    //     // 保留调用时传入的参数
+    //     let args = arguments
+
+    //     // 每次事件被触发时，都去清除之前的旧定时器
+    //     if (timer) {
+    //       clearTimeout(timer)
+    //     }
+    //     // 设立新定时器
+    //     timer = setTimeout(function () {
+
+    //       fn.apply(context, args)
+    //     }, delay)
+    //   }
+    // }
+
+    // 用debounce来包装scroll的回调
+    const better_scroll = myDebounce(() => console.log('触发了滚动事件'), 1000)
+
+    document.addEventListener('scroll', better_scroll)
+
+
+
+//     // fn是我们需要包装的事件回调, delay是时间间隔的阈值
+// function throttle(fn, delay) {
+//   // last为上一次触发回调的时间, timer是定时器
+//   let last = 0, timer = null
+//   // 将throttle处理结果当作函数返回
+  
+//   return function () { 
+//     // 保留调用时的this上下文
+//     let context = this
+//     // 保留调用时传入的参数
+//     let args = arguments
+//     // 记录本次触发回调的时间
+//     let now = +new Date()
+    
+//     // 判断上次触发的时间和本次触发的时间差是否小于时间间隔的阈值
+//     if (now - last < delay) {
+//     // 如果时间间隔小于我们设定的时间间隔阈值，则为本次触发操作设立一个新的定时器
+//        clearTimeout(timer)
+//        timer = setTimeout(function () {
+//           last = now
+//           fn.apply(context, args)
+//         }, delay)
+//     } else {
+//         // 如果时间间隔超出了我们设定的时间间隔阈值，那就不等了，无论如何要反馈给用户一次响应
+//         last = now
+//         fn.apply(context, args)
+//     }
+//   }
+// }
+
+// // 用新的throttle包装scroll的回调
+// const better_scroll = throttle(() => console.log('触发了滚动事件'), 1000)
+
+// document.addEventListener('scroll', better_scroll)
+
+
+  </script>
+</body>
+
+</html>
