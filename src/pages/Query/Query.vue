@@ -2,7 +2,7 @@
   <div class="query-wrap">
     <div class="query-main">
       <ul class="query-list">
-        <li class="query-item" v-for="(movie,index) in movies" :key="index" >
+        <li class="query-item" v-for="(movie,index) in currentMovie?currentMovie:movies" :key="index" >
           <div @click="toDetail(movie.id)" class="query-img"><img :src="movie.images.large" alt=""/></div>
           <div class="query-title"><p>{{movie.title}}</p></div>
           <div class="query-english">{{movie.original_title}}</div>
@@ -25,7 +25,8 @@ import {searchMovie} from '../../filter/index.js'
 export default {
   data(){
     return {
-      movies:[]
+      movies:[],
+      currentMovie:[]
     }
   },
   computed:{
@@ -41,12 +42,12 @@ export default {
     
     
     console.log(searchMovie(this.searchName,this.movies))
-    this.movies = searchMovie(this.searchName,this.movies)
+    this.currentMovie = searchMovie(this.searchName,this.movies)
   },
   watch:{
     searchName(){
       console.log(this.searchName)
-      this.movies = searchMovie(this.searchName,this.movies)
+      this.currentMovie = searchMovie(this.searchName,this.movies)
     }
   },
   methods:{

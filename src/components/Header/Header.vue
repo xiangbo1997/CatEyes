@@ -49,7 +49,7 @@
           </a>
         </div>-->
         <div id="search">
-          <input class="text" placeholder="请输入内容" v-model="searchText" @keyup.13="searchMovies" />
+          <input class="text" placeholder="请输入内容" v-model="searchText" @keyup="searchMovies" />
           <div class="search-text"></div>
         </div>
       </div>
@@ -84,9 +84,13 @@ export default {
       if (this.$router.history.current.path !== "/query") {
         this.$router.push("/query");
       }
+    },
+    newSearch(){
+
     }
   },
   mounted() {
+    this.newSearch = throttle(this.searchMovies,1000)
     console.log(this.$route.path);
     if (this.$route.path === "/detail/ticket") {
       this.$store.commit("UPDATE_SHOWDETAIL", false);
