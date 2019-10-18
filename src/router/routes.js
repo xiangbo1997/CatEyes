@@ -21,6 +21,7 @@ import Trailer from '../pages/Trailer/Trailer.vue'
 //引入picture
 import Picture from '../pages/Picture/Picture.vue'
 import Shopcat from '../pages/Shopcat/Shopcat.vue'
+import Ticket from '../pages/Ticket/Ticket.vue'
 
 export default [
   {
@@ -39,7 +40,13 @@ export default [
   },
   {
     path: '/detail',
-    component: Detail
+    component: Detail,
+    children:[
+      {
+        path:'/detail/ticket',
+        component:Ticket
+      }
+    ]
 
   },
 

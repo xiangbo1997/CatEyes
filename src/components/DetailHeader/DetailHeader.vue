@@ -1,12 +1,11 @@
-<template>
-
-    <div>
+<template>  
+  <div>
       <el-dialog
         class="dialog"
         :visible.sync="dialogVisible"
         width="30%"
         :before-close="handleClose"
-      >
+        >
         <i v-show="value!==0" class="number">{{value}}分，{{texts[value-1]}}</i>
         <!-- 评分 -->
         <el-rate v-model="value"></el-rate>
@@ -21,32 +20,33 @@
         <div class="left">
           <img
             class="bigImg"
-            src="https://p0.meituan.net/movie/cddf92d0ac6a0db837a1bc488b241c42267927.jpg@464w_644h_1e_1c"
+            :src="myMovie.image"
             alt
           />
         </div>
         <div class="title">
           <div class="cinemaName">
-            <p>航海王：狂热行动</p>
+            <p>{{myMovie.title}}</p>
             <p>ONE PIECE STAMPEDE</p>
           </div>
           <div class="typeItem">
-            <p>动画,冒险</p>
-            <p>日本 / 101分钟</p>
-            <p>2019-09-30 09:00大陆上映</p>
+            <p>{{myMovie.tags}}</p>
+            <p>日本 / {{myMovie.durations}}</p>
+            <p>{{myMovie.pubdates}}</p>
             <div class="btns">
               <div class="top-btn">
                 <el-button class="love" @click="wantView">
                   <!-- 想看、已想看 -->
                   <span :class="view"></span>
-                  {{content}}
+                  {{value>0 ? '看过':  content}}
                 </el-button>
                 <el-button class="score" @click="dialogVisible = true">
                   <span class="el-icon-star-off" @click="dialogVisible = true"></span>
                   {{value?`${value}分,${texts[value-1]}`:'评分'}}
                 </el-button>
               </div>
-              <el-button type="danger" class="bottom-btn" @click="$router.push('/detail/ticket')">特惠购票</el-button>
+              <el-button type="danger" class="bottom-btn" @click="toTitck" v-show="this.$route.fullPath!=='/detail/ticket'"><slot name="goTick">特惠购票</slot></el-button>
+              <el-button type="danger" class="bottom-btn" v-show="this.$route.fullPath==='/detail/ticket'">查看电影详情</el-button>
             </div>
           </div>
         </div>
@@ -54,9 +54,8 @@
           <li>
             <div class="small">用户评分</div>
             <div class="ratingScore">
-              <div>9.4</div>
+              <div>{{myMovie.score}}</div>
               <div class="small">
-                <p>星星</p>
                 <p>126.6万人评分</p>
               </div>
             </div>
@@ -67,30 +66,36 @@
           </li>
         </ul>
       </div>
- 
-    </div>
-      
+  </div>
+
 </template>
 <script>
+let  datas = require ('./data/data.json')
+import { UPDATE_SHOWDETAIL } from "../../store/mutations-type.js";
 export default {
    data() {
     return {
-      movie: {},
+      myMovie: {},
       wantSee:false,
       dialogVisible: false,
       value: null,
       textarea: '',
       texts:['极差', '失望', '一般', '满意', '惊喜'],
       content:'想看',
-      view:'el-icon-view'
+      view:'el-icon-view',
+      idWant:true,
+      star:0,
+
+
     };
+  },
+  // props:["movie"],
+  mounted(){
+    this.myMovie = datas
+    console.log(this.$route)
   },
   methods:{
     changeValue(e){
-      // const {value} = this
-      // this.value = value
-      // console.log(this.value)
-      // console.log(this.texts[value-1])
       console.log(e)
       this.value = e
       if(this.content === '想看'|| this.content === '已想看'){
@@ -98,9 +103,6 @@ export default {
           this.content = '看过'
         
       }
-      
-      
-
     },
     handleClose(done) {
         this.$confirm('确认关闭？')
@@ -120,6 +122,10 @@ export default {
         this.value = null
       }
       
+    },
+    toTitck(){
+      this.$router.push('/detail/ticket')
+      this.$store.commit(UPDATE_SHOWDETAIL,false)
     }
 
     },
@@ -164,6 +170,7 @@ el-dialog
       width 240px
       height 330px
       border 5px solid white
+      box-shadow 0px 8px 1px rgba(111,30,111,.5)
   .title
     width 900px
     height 150px

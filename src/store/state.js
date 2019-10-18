@@ -1,5 +1,7 @@
 export default{
   searchName:'',
   phone:"",
-  password:""
+  password:"",
+  movie:{},
+  showDetail:true
 }

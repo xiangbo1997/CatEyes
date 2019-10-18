@@ -2,9 +2,9 @@
   <div class="header">
     <div class="header-inner">
       <div class="header-main">
-        <img src="" alt="" class="box" v-if="phone!=='18341327249'">
+        <img src alt class="box" v-if="phone!=='18341327249'" />
         <div id="logo">
-          <img src="./image/logo.jpg" alt  @click="$router.push('/perform')" />
+          <img src="./image/logo.jpg" alt @click="$router.push('/perform')" />
         </div>
         <div id="city">
           <select>
@@ -16,29 +16,29 @@
         </div>
         <ul id="nav" @click="click">
           <router-link to="/msite">
-            <li style="background-color:#fc3e00">首页</li>
+            <li  :class="{cls1:$route.path==='/msite'}">首页</li>
           </router-link>
           <router-link to="/movies">
             <li :class="{cls1:$route.path==='/movies'}">电影</li>
           </router-link>
           <router-link to="/cinema">
-            <li>影院</li>
+            <li :class="{cls1:$route.path==='/cinema'}">影院</li>
           </router-link>
-          
+
           <router-link to="/billboard">
-            <li>榜单</li>
+            <li :class="{cls1:$route.path==='/billboard'}">榜单</li>
           </router-link>
           <router-link to="/hotspot">
-            <li>热点</li>
+            <li :class="{cls1:$route.path==='/hotspot/hothome'}">热点</li>
           </router-link>
           <router-link to="/market">
-            <li>商城</li>
+            <li :class="{cls1:$route.path==='/market'}">商城</li>
           </router-link>
           <router-link to="/profile">
-            <li>个人中心</li>
+            <li :class="{cls1:$route.path==='/profile'}">个人中心</li>
           </router-link>
           <router-link to="/login" id="myLogin">
-            <li v-show="phone!=='18341327249'">{{phone==="18341327249"?"已登录":"登录"}}</li>
+            <li :class="{cls1:$route.path==='/login'}" v-show="phone!=='18341327249'">{{phone==="18341327249"?"已登录":"登录"}}</li>
           </router-link>
         </ul>
         <!-- <div id="download">
@@ -47,12 +47,11 @@
             <span>App下载</span>
             <span class="caret el-icon-caret-bottom"></span>
           </a>
-        </div> -->
+        </div>-->
         <div id="search">
           <input class="text" placeholder="请输入内容" v-model="searchText" @keyup.13="searchMovies" />
           <div class="search-text"></div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -62,7 +61,7 @@
 import { reqSearchMovies } from "../../api/index.js";
 import { UPDATA_SEARCH_NAME } from "../../store/mutations-type";
 import { throttle } from "../../utils/index.js";
-import  {mapState} from "vuex"
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -72,13 +71,13 @@ export default {
 
   methods: {
     click(e) {
-      typeof e.target.parentNode.parentNode.children;
-      const a = e.target.parentNode.parentNode.children;
-      const b = [...a];
-      b.map((item, index) => {
-        item.firstChild.style.background = "white";
-      });
-      console.log((e.target.style.background = "#fc3e00"));
+      // typeof e.target.parentNode.parentNode.children;
+      // const a = e.target.parentNode.parentNode.children;
+      // const b = [...a];
+      // b.map((item, index) => {
+      //   item.firstChild.style.background = "white";
+      // });
+      // console.log((e.target.style.background = "#fc3e00"));
     },
     searchMovies() {
       this.$store.commit(UPDATA_SEARCH_NAME, this.searchText);
@@ -86,23 +85,26 @@ export default {
         this.$router.push("/query");
       }
     }
-    
   },
-  mounted(){
-      // this.phone=window.localStorage.getItem("a")
-      // this.password=window.localStorage.getItem("b")
-      // this.phone=window.localStorage.setItem("a")
-      // this.password=window.localStorage.setItem("b")
-      // console.log(this.phone)
-      // console.log(this.password)
+  mounted() {
+    console.log(this.$route.path);
+    if (this.$route.path === "/detail/ticket") {
+      this.$store.commit("UPDATE_SHOWDETAIL", false);
+    }
   },
-  computed:{
-    ...mapState(["phone","password"])
-    
+  computed: {
+    ...mapState(["phone", "password"])
+  },
+  watch: {
+    $route() {
+      console.log(this.$route.path);
+      if (this.$route.path === "/detail") {
+        this.$store.commit("UPDATE_SHOWDETAIL", true);
+      } else if (this.$route.path === "/detail/ticket") {
+        this.$store.commit("UPDATE_SHOWDETAIL", false);
+      }
+    }
   }
-
-
-  
 };
 </script>
 <style lang="stylus">
@@ -161,11 +163,11 @@ export default {
         width 132px
         height 100%
         a
-          width  132px
+          width 132px
           height 80px
           display flex
           align-items center
-          justify-content center    
+          justify-content center
       #search
         position relative
         width 220px
@@ -186,9 +188,9 @@ export default {
           position absolute
           top 20px
           left 0
-          border 1px #ccc solid 
+          border 1px #ccc solid
           border-radius 50px
           outline none
           padding-left 18px
-          margin-left 125px 
+          margin-left 125px
 </style>

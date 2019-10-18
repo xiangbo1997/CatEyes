@@ -1,22 +1,22 @@
 <template>
-  <div class="container">
-    <DetailHeader />
-    <div class="introduce">
+  <div  class="container">
+    <DetailHeader v-show="showDetail" :movie="movie"/>
+    <div v-show="showDetail"  class="introduce">
       <!-- 默认选中第一个  value="first"  first为第一个选项卡的名字 -->
-      <el-tabs class="switchTab" value="first">
+      <el-tabs class="switchTab" :value="value">
         <el-tab-pane label="介绍" name="first" class="first">
           <div class="cont">
             <div class="first-title">
               <span></span>剧情简介
             </div>
-            <p class="text">天地灵气孕育出一颗能量巨大的混元珠，元始天尊将混元珠提炼成灵珠和魔丸，灵珠投胎为人不</p>
+            <p class="text">{{movie.content}}</p>
           </div>
           <div class="actors">
             <div class="second-title">
               <span></span>
               演职人员
-              <i class="all">
-                <a class="allText">全部</a>>
+              <i class="all" @click="value='second'">
+                <a class="allText" >全部</a>>
               </i>
             </div>
             <div class="actor">
@@ -28,10 +28,12 @@
                 <div class="director">
                   <a href>
                     <img
-                      src="https://p0.meituan.net/movie/c047a7f5444ba9bef44044da352cb3ba114816.jpg@128w_170h_1e_1c"
+                      src="https://p0.meituan.net/movie/bb97b91028fd1f2926c09ed5b775b21a38905.jpg@128w_170h_1e_1c"
                       alt
                     />
-                    <p>饺子</p>
+                    <p>
+      乔什·库雷
+    </p>
                   </a>
                 </div>
                 <li class="actor-item">
@@ -40,8 +42,10 @@
                       src="https://p0.meituan.net/moviemachine/7d4edd5f01400879de3785ee1e024f99141062.jpg@128w_170h_1e_1c"
                       alt
                     />
-                    <p>饺子</p>
-                    <p class="small">饰：儿童哪吒</p>
+                    <p>
+      汤姆·汉克斯
+    </p>
+                    <p class="small">饰：胡迪（配音）Woody (voice)</p>
                   </a>
                 </li>
                 <li class="actor-item">
@@ -58,7 +62,7 @@
             </div>
           </div>
           <div class="picture">
-            <div class="first-title">
+            <div class="first-title" @click="value='fourth'">
               <span></span>图集
               <i class="all">
                 <a class="allText">全部</a>>
@@ -177,26 +181,26 @@
                   />
                 </div>
                 <div class="info">
-                  <a href>饺子</a>
-                  <div>饰：刘长健</div>
+                  <a href>蒂姆·波顿</a>
+                  <div>饰：饰：霍尔特·法瑞尔 Holt Farrier</div>
                 </div>
               </li>
               <li class="second-item">                
                 <div class="second-img">
                   <img
-                    src="https://p1.meituan.net/movie/c43af5e137d4f2bde72e635bfc16dbdc32830.jpg@128w_170h_1e_1c"
+                    src="https://p1.meituan.net/moviemachine/05881cc4e6967bc98312b67a5f9213a240977.jpg@128w_170h_1e_1c"
                     alt
                   />
                 </div>
                 <div class="info">
-                  <a href>饺子</a>
-                  <div>饰：刘长健</div>
+                  <a href>丹尼·德维托</a>
+                  <div>饰：麦克斯·美第奇 Max Medici</div>
                 </div>
               </li>
               <li class="second-item">                
                 <div class="second-img">
                   <img
-                    src="https://p1.meituan.net/movie/c43af5e137d4f2bde72e635bfc16dbdc32830.jpg@128w_170h_1e_1c"
+                    src="https://p1.meituan.net/moviemachine/05881cc4e6967bc98312b67a5f9213a240977.jpg@128w_170h_1e_1c"
                     alt
                   />
                 </div>
@@ -410,28 +414,41 @@
         </div>
       </div>
     </div>
+    <div class="holder">
+      
+      <router-view></router-view>
+     </div> 
+    
   </div>
 </template>
 <script>
 import DetailHeader from '../../components/DetailHeader/DetailHeader.vue'
-import { reqMovieDetail } from "../../api/index.js";
+// import { reqMovieDetail } from "../../api/index.js";
 import datas from "./data/data.json";
+import {mapState} from 'vuex'
 export default {
+  computed:{
+    ...mapState(['showDetail'])
+  },
   components:{
     DetailHeader
   }, 
-  
-  async mounted() {
-    // const result = await reqMovieDetail(this.$router.history.current.query.id)
-    // if (result) {
-    //   this.movie = result;
-    // } else {
-    //   this.movie = datas.data;
-    this.$router
-    console.log( this.$route.query.id)
-    // }
-    this.movie = datas.data;
+   mounted(){
+
+
+    this.movie = datas
   },
+  data(){
+    return {
+      value : 'first',
+      movie:{}
+    }
+},
+watch:{
+  $router(){
+    console.log(this.$router)
+  }
+}
   
   }
  
