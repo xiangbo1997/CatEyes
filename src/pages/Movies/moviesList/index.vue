@@ -3,8 +3,8 @@
     <ul class="img-list" v-if="typeMovies.length">
       <li class="movie" v-for="(movie,index) in  isChange?typeMovies:movies" :key="index" @click="goTodetail(movie.id)">
         <a >
-          
-          <img :src="movie.images.large" v-if="movie.images"  alt/>
+          <div class="img-box"> <img :src="movie.images.large" v-if="movie.images"  alt/></div>
+         
           <!-- <img src="C:\Users\33013\Desktop\集体项目\catEys\src\pages\Movies\moviesList/imgs/loading.gif'" v-else alt/>
           {{movie.images?movie.images.large:'./imgs/loading.gif'}} -->
           <p class="movie-name">{{movie.title}}</p>
@@ -18,7 +18,7 @@
       background 
       layout="prev, pager, next" 
       :total="typeMovies?typeMovies.length:20" class="page" 
-      :page-size='18'
+      :page-size='10'
        @current-change="handleCurrentChange"
       ></el-pagination>
     </div>
@@ -30,6 +30,7 @@
 export default {
       data () {
         return {
+          
           // moveObj:{},
           movies:[],
           isChange:true
@@ -79,15 +80,19 @@ export default {
     margin 0 31.7px 30px 0
     text-align center
     float left
-    img
+    .img-box
       width 160px
       height 220px
-    .movie-name
-      margin-top 5px
-      color #333
-    .grade
-      margin-top 10px
-      color #ffb400
+      background-color yellow 
+      img
+        width 160px
+        height 220px
+      .movie-name
+        margin-top 5px
+        color #333
+      .grade
+        margin-top 10px
+        color #ffb400
 .pagination
   height 32px
   width 30%

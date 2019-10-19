@@ -38,19 +38,21 @@
         </div>
         <div class="movies-warp">
           <div class="movies-header">
-            <div class="control-group" >
+            <div class="control-group" v-show="typeMovies.length>1">
               <div class="circle" @click="hotSort">
                 <img src="./moviesList/imgs/123.png" alt v-if="selected==H" />
               </div>
               <span>按热门排序</span>
             </div>
-            <div class="control-group" >
+            <div class="control-group" v-show="typeMovies.length>1">
               <div class="circle" @click="yearSort">
                 <img src="./moviesList/imgs/123.png" alt v-if="selected==Y" />
               </div>
               <span>按时间排序</span>
             </div>
-            <div class="control-group" >
+
+
+            <div class="control-group" v-show="typeMovies.length>1">
               <div class="circle" @click="scoreSort">
                 <img src="./moviesList/imgs/123.png" alt v-if="selected==S" />
               </div>
@@ -434,6 +436,7 @@ export default {
         border 1px solid #999
         box-sizing border-box
         padding 0 20px
+        margin-left -8px
         .list-ul
           width 100%
           height 100%

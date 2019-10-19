@@ -104,10 +104,22 @@
             </div>
           </div>
           <div class="hotRatings">
+            <el-dialog
+              :visible.sync="dialogVisible"
+              width="30%"
+              :before-close="handleClose">
+              <span v-show="rate!==0">{{`${rate}分，${texts[rate-1]}`}}</span>
+              <el-rate v-model="rate"></el-rate>
+              <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea" ></el-input>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+              </span>
+            </el-dialog>
             <div class="first-title">
               <span></span>热门短评
               <i class="all">
-                <div class="writeRating">写短评</div>
+                <div class="writeRating" @click="dialogVisible = true">写短评</div>
               </i>
             </div>
             <div class="comment-list-container">
@@ -438,10 +450,24 @@ export default {
 
     this.movie = datas
   },
+  methods:{
+    handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      }
+    },
+ 
   data(){
     return {
       value : 'first',
-      movie:{}
+      movie:{},
+      dialogVisible: false,
+      rate:0,
+      texts:['太烂', '比较差', '一般', '比较好', '完美'],
+      textarea:''
     }
 },
 watch:{

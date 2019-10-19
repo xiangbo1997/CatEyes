@@ -42,7 +42,7 @@
         <div></div>
         <span>电影列表</span>
       </div>
-      <li class="ticket-item" v-show="Brand[1]">        
+      <li class="ticket-item" v-show="chose">        
         <p class="cinema">万达影城</p> 
         <div class="Address">
           <span>地址：朝阳区大屯里金泉购物中心318号楼4层</span> 
@@ -51,8 +51,8 @@
         </div> 
         
       </li>
-     <li class="ticket-item" v-show="Brand[5]">        
-        <p class="cinema">金泉港IMAX国际影城</p> 
+     <li class="ticket-item" v-show="!chose">        
+        <p class="cinema">大地影院</p> 
         <div class="Address">
           <span>地址：朝阳区大屯里金泉购物中心318号楼4层</span> 
           <span class="price"> <span class="red">￥64</span>起</span>
@@ -139,19 +139,24 @@ export default {
       for (let i = 0; i < chindren.length; i++) {
         chindren[i].style.background = "white";
       }
-      e.target.parentNode.style.background = "#f34d41";
+      e.target.parentNode.style.background = "red";
       this.moviesArea = e.target.innerText;
+      this.chose = !this.chose
+    },
+    data(){
+      chose:true
     }
+    
   },
   watch:{
-    $route(){
-      console.log(this.$route.path)
-      if(this.$route.path === '/detail'){
-        this.$store.commit('UPDATE_SHOWDETAIL',true)
-      }else if(this.$route.path === '/detail/ticket'){
-        this.$store.commit('UPDATE_SHOWDETAIL',false)
-      }
-    }
+    // $route(){
+    //   console.log(this.$route.path)
+    //   if(this.$route.path === '/detail'){
+    //     this.$store.commit('UPDATE_SHOWDETAIL',true)
+    //   }else if(this.$route.path === '/detail/ticket'){
+    //     this.$store.commit('UPDATE_SHOWDETAIL',false)
+    //   }
+    // }
   }
 };
 </script>
@@ -191,6 +196,7 @@ export default {
           width 49px
           padding 6px 35px
           white-space nowrap
+          border-radius 10px
           &:first-child
             width 11px
             margin-left 9px

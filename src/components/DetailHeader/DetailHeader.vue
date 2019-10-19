@@ -3,16 +3,18 @@
       <el-dialog
         class="dialog"
         :visible.sync="dialogVisible"
-        width="30%"
+        width="40%"
         :before-close="handleClose"
         >
-        <i v-show="value!==0" class="number">{{value}}分，{{texts[value-1]}}</i>
+        <!-- <span v-if="value!==0||value!=='null'" class="number">{{value==='null'?'':`${value}分，${texts[value-1]}`}}</span> -->
+        <span v-if="value!==0" class="number">{{value===0?'':`${value}分，${texts[value-1]}`}}</span>
         <!-- 评分 -->
         <el-rate v-model="value"></el-rate>
         <!-- <el-rate v-model="value" show-text :texts="texts" @change="changeValue"></el-rate> -->
-        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea"></el-input>
+        <!-- clearable @blur="textarea===''" @clear="textarea===''" -->
+        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea" ></el-input>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false" :disabled="value?false:true">确 定</el-button>
+          <el-button type="primary" @click="markSure" :disabled="value?false:true">确 定</el-button>
         </span>
       </el-dialog>
       <!-- 详情 -->
@@ -26,8 +28,8 @@
         </div>
         <div class="title">
           <div class="cinemaName">
-            <p>{{myMovie.title}}</p>
-            <p>ONE PIECE STAMPEDE</p>
+            <p>双子杀手</p>
+            <p>Gemini killer</p>
           </div>
           <div class="typeItem">
             <p>{{myMovie.tags}}</p>
@@ -45,7 +47,7 @@
                   {{value?`${value}分,${texts[value-1]}`:'评分'}}
                 </el-button>
               </div>
-              <el-button type="danger" class="bottom-btn" @click="toTitck" v-show="this.$route.fullPath!=='/detail/ticket'"><slot name="goTick">特惠购票</slot></el-button>
+              <el-button type="danger" class="bottom-btn" @click="toTitck" v-if="this.$route.fullPath!=='/detail/ticket'"><slot name="goTick">特惠购票</slot></el-button>
               <el-button type="danger" class="bottom-btn" v-show="this.$route.fullPath==='/detail/ticket'">查看电影详情</el-button>
             </div>
           </div>
@@ -86,7 +88,6 @@ export default {
       idWant:true,
       star:0,
 
-
     };
   },
   // props:["movie"],
@@ -97,6 +98,7 @@ export default {
   methods:{
     changeValue(e){
       console.log(e)
+      // e就是当前星星改变时我们所设置的分数
       this.value = e
       if(this.content === '想看'|| this.content === '已想看'){
         
@@ -107,7 +109,8 @@ export default {
     handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
-            this.value =
+            this.value = 0
+            this.textarea = ''
             done();
           })
           .catch(_ => {});
@@ -119,9 +122,13 @@ export default {
       }else if(this.content === '已想看'){
         this.content ='想看'
       }else{
-        this.value = null
+        this.value = 0
       }
       
+    },
+    markSure(){
+      this.dialogVisible = false 
+      this.textarea=''
     },
     toTitck(){
       this.$router.push('/detail/ticket')
@@ -137,18 +144,21 @@ export default {
     content(){
       if(this.content === '想看'){
         this.view = 'el-icon-view'
-      }else{
+      }if(this.content === '已想看'){
         this.view = 'el-icon-s-flag'
+      }else if(this.content === '看过'){
+        this.view = 'el-icon-s-management'
       }
     }
   },
 };
 </script>
 <style lang='stylus' rel='stylesheet/stylus'>
-el-dialog
-  width 80%
-  height 80%
-  border-bottom 10px solid #ccc
+
+.el-dialog
+  height 300px
+  border-radius 50px
+  border 10px solid #999
   .number
     font-size 20px
     color yellow
